@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 
+def increase_quality(item):
+    if item.quality < 50:
+        item.quality += 1
+
+def decrease_quality(item):
+    if item.quality > 0:
+        item.quality -= 1
+
 class GildedRose(object):
 
     def __init__(self, items):
         self.items = items
-
-    def increase_quality(self, item):
-        item.quality += 1 if item.quality < 50 else 0
 
     def update_quality(self):
         for item in self.items:
@@ -15,26 +20,25 @@ class GildedRose(object):
                 item.sell_in = item.sell_in - 1
 
             if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                self.increase_quality(item)
-                if item.sell_in < 10:
-                    self.increase_quality(item)
-                    if item.sell_in < 5:
-                        self.increase_quality(item)
+                if item.sell_in < 0:
+                    item.quality = 0
+                else:
+                    increase_quality(item)
+                    if item.sell_in < 10:
+                        increase_quality(item)
+                        if item.sell_in < 5:
+                            increase_quality(item)
 
             if item.name == "Aged Brie":
-                self.increase_quality(item)
+                increase_quality(item)
                 if item.sell_in < 0:
-                    self.increase_quality(item)
+                    increase_quality(item)
 
-            if item.name != "Backstage passes to a TAFKAL80ETC concert" and item.name != "Aged Brie" and item.name != "Sulfuras, Hand of Ragnaros" and item.quality > 0:
-                item.quality -= 1
+            if item.name != "Backstage passes to a TAFKAL80ETC concert" and item.name != "Aged Brie" and item.name != "Sulfuras, Hand of Ragnaros":
+                decrease_quality(item)
+                if item.sell_in < 0:
+                    decrease_quality(item)
 
-            if item.sell_in < 0:
-                if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                    item.quality = item.quality - item.quality
-                else:
-                    if item.quality > 0 and item.name != "Aged Brie" and item.name != "Sulfuras, Hand of Ragnaros":
-                        item.quality -= 1
 
 
 class Item:
