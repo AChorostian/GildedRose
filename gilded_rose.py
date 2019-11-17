@@ -7,6 +7,8 @@ def increase_quality(item):
 def decrease_quality(item):
     if item.quality > 0:
         item.quality -= 1
+        if item.quality > 0 and item.name == "Conjured Mana Cake":
+            item.quality -= 1
 
 class GildedRose(object):
 
