@@ -28,6 +28,17 @@ def aged_update(item):
     else:
         increase_quality(item,1)
 
+def update_item(item):
+    item.sell_in -= 1
+    if item.name == "Backstage passes to a TAFKAL80ETC concert":
+        backstage_update(item)
+    elif item.name == "Aged Brie":
+        aged_update(item)
+    elif item.name == "Conjured Mana Cake":
+        decrease_quality(item, 2)
+    else:
+        decrease_quality(item, 1)
+
 class GildedRose(object):
 
     def __init__(self, items):
@@ -35,17 +46,8 @@ class GildedRose(object):
 
     def update_quality(self):
         for item in self.items:
-            if item.name == "Sulfuras, Hand of Ragnaros":
-                continue
-            item.sell_in -= 1
-            if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                backstage_update(item)
-            elif item.name == "Aged Brie":
-                aged_update(item)
-            elif item.name == "Conjured Mana Cake":
-                decrease_quality(item, 2)
-            else:
-                decrease_quality(item, 1)
+            if item.name != "Sulfuras, Hand of Ragnaros":
+                update_item(item)
 
 class Item:
     def __init__(self, name, sell_in, quality):
