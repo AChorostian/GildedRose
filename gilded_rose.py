@@ -6,9 +6,10 @@ def increase_quality(item, value):
             item.quality += 1
 
 def decrease_quality(item, value):
-    if item.quality > 0:
-        item.quality -= 1
-        if item.quality > 0 and item.name == "Conjured Mana Cake":
+    if item.sell_in < 0:
+        value *= 2
+    for _ in range(value):
+        if item.quality > 0:
             item.quality -= 1
 
 def backstage_update(item):
@@ -22,8 +23,9 @@ def backstage_update(item):
         increase_quality(item,1)
 
 def aged_update(item):
-    increase_quality(item,1)
     if item.sell_in < 0:
+        increase_quality(item,2)
+    else:
         increase_quality(item,1)
 
 class GildedRose(object):
@@ -40,10 +42,10 @@ class GildedRose(object):
                 backstage_update(item)
             elif item.name == "Aged Brie":
                 aged_update(item)
+            elif item.name == "Conjured Mana Cake":
+                decrease_quality(item, 2)
             else:
                 decrease_quality(item, 1)
-                if item.sell_in < 0:
-                    decrease_quality(item, 1)
 
 class Item:
     def __init__(self, name, sell_in, quality):
