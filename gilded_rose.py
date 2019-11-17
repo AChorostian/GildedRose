@@ -1,14 +1,30 @@
 # -*- coding: utf-8 -*-
 
-def increase_quality(item):
-    if item.quality < 50:
-        item.quality += 1
+def increase_quality(item, value):
+    for _ in range(value):
+        if item.quality < 50:
+            item.quality += 1
 
-def decrease_quality(item):
+def decrease_quality(item, value):
     if item.quality > 0:
         item.quality -= 1
         if item.quality > 0 and item.name == "Conjured Mana Cake":
             item.quality -= 1
+
+def backstage_update(item):
+    if item.sell_in < 0:
+        item.quality = 0
+    elif item.sell_in < 5:
+        increase_quality(item,3)
+    elif item.sell_in < 10:
+        increase_quality(item,2)
+    else:
+        increase_quality(item,1)
+
+def aged_update(item):
+    increase_quality(item,1)
+    if item.sell_in < 0:
+        increase_quality(item,1)
 
 class GildedRose(object):
 
@@ -17,35 +33,17 @@ class GildedRose(object):
 
     def update_quality(self):
         for item in self.items:
-
             if item.name == "Sulfuras, Hand of Ragnaros":
                 continue
-
             item.sell_in -= 1
-
             if item.name == "Backstage passes to a TAFKAL80ETC concert":
+                backstage_update(item)
+            elif item.name == "Aged Brie":
+                aged_update(item)
+            else:
+                decrease_quality(item, 1)
                 if item.sell_in < 0:
-                    item.quality = 0
-                else:
-                    increase_quality(item)
-                    if item.sell_in < 10:
-                        increase_quality(item)
-                        if item.sell_in < 5:
-                            increase_quality(item)
-                continue
-
-            if item.name == "Aged Brie":
-                increase_quality(item)
-                if item.sell_in < 0:
-                    increase_quality(item)
-                continue
-
-            if item.name != "Backstage passes to a TAFKAL80ETC concert" and item.name != "Aged Brie":
-                decrease_quality(item)
-                if item.sell_in < 0:
-                    decrease_quality(item)
-
-
+                    decrease_quality(item, 1)
 
 class Item:
     def __init__(self, name, sell_in, quality):
