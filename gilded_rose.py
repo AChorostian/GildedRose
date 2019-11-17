@@ -7,34 +7,32 @@ class GildedRose(object):
 
     def update_quality(self):
         for item in self.items:
-            if item.name == "Aged Brie" or item.name == "Backstage passes to a TAFKAL80ETC concert":
-                if item.quality < 50:
+            if item.name == "Backstage passes to a TAFKAL80ETC concert" and item.quality < 50:
+                item.quality += 1
+                if item.sell_in < 11 and item.quality < 50:
                     item.quality += 1
-                    if item.name == "Backstage passes to a TAFKAL80ETC concert":
-                        if item.sell_in < 11:
-                            if item.quality < 50:
-                                item.quality += 1
-                        if item.sell_in < 6:
-                            if item.quality < 50:
-                                item.quality += 1
-            else:
+                    if item.sell_in < 6 and item.quality < 50:
+                        item.quality += 1
+            if item.name != "Backstage passes to a TAFKAL80ETC concert" and item.name != "Aged Brie":
                 if item.quality > 0:
                     if item.name != "Sulfuras, Hand of Ragnaros":
                         item.quality -= 1
             if item.name != "Sulfuras, Hand of Ragnaros":
                 item.sell_in = item.sell_in - 1
             if item.sell_in < 0:
-                if item.name == "Aged Brie":
-                    if item.quality < 50:
-                        item.quality = item.quality + 1
-                else:
+                if item.name != "Aged Brie":
                     if item.name == "Backstage passes to a TAFKAL80ETC concert":
                         item.quality = item.quality - item.quality
                     else:
                         if item.quality > 0:
                             if item.name != "Sulfuras, Hand of Ragnaros":
                                 item.quality -= 1
-            
+
+            if item.name == "Aged Brie" and item.quality < 50:
+                item.quality += 1
+                if item.quality < 50 and item.sell_in < 0:
+                    item.quality +=1
+
 
 
 class Item:
@@ -45,3 +43,15 @@ class Item:
 
     def __repr__(self):
         return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+
+
+# name, sellIn, quality
+# +5 Dexterity Vest, 4, 14
+# Aged Brie, -4, 10
+# Elixir of the Mongoose, -1, 0
+# Sulfuras, Hand of Ragnaros, 0, 80
+# Sulfuras, Hand of Ragnaros, -1, 80
+# Backstage passes to a TAFKAL80ETC concert, 9, 27
+# Backstage passes to a TAFKAL80ETC concert, 4, 50
+# Backstage passes to a TAFKAL80ETC concert, -1, 0
+# Conjured Mana Cake, -3, 0
